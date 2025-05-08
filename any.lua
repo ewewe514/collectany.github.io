@@ -5,10 +5,15 @@ task.spawn(function()
         if activateRemote then
             local runtimeItems = game.Workspace:WaitForChild("RuntimeItems")
 
-            for _, item in pairs(runtimeItems:GetChildren()) do
-                if item:IsA("Model") and item.PrimaryPart then -- Collect ANY model with a PrimaryPart
-                    local args = { Instance.new("Model", nil) }
-                    activateRemote:FireServer(unpack(args))
+            for _, ammoContainer in pairs(runtimeItems:GetChildren()) do
+                if ammoContainer:IsA("Model") and ammoContainer.Name == "RevolverAmmo" then
+                    local ammo = ammoContainer:FindFirstChild("RevolverAmmo")
+                    if ammo then
+                        local targetPart = ammo:FindFirstChildWhichIsA("BasePart") or ammo
+
+                        local args = { targetPart.Parent }
+                        activateRemote:FireServer(unpack(args))
+                    end
                 end
             end
         end
